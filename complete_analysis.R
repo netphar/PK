@@ -42,10 +42,10 @@
 # 1. Before using the script it is necessary to input correct setwd() and filename
 # 2. To modify the plate layout or Cell_Types identified in an experiment, please modify "Cell_type", "keys" and "values" variables 
 # 3. To modify any vizualization settings please refer to heatmap.2 function and its help page
-# 4. To save plots please use RStudio "Export" function
+# 4. Plots and csv with fold change numerical values are saved in your getwd() directory
 #
 # ToDo's:
-# automate plot saving in user defined format (image vs pdf)
+# plot saving in user defined format (image vs pdf)
 # include sanity checks if gating is consistent or not
 # allow for batch processing of files
 ######################################################################################### 
