@@ -146,7 +146,7 @@ mat <- pAKT_ready[,-1]
 rownames(mat) <- pAKT_ready[,1]
 mat[,c(13,14,15,1,2,3,4,5,6,7,8,9,10,11,12)] -> mat #rearrange so that SFEMII and SFEMII-EPO and SFEMII-TPO are in front
 mat <- log10(mat) - log10(mat[,1]) # log transform to get fold change
-mat <- mat[-7,] # get rid of -MK
+pAKT <- mat[-7,] # get rid of -MK
 
 testF('pERK') -> pERK_raw
 pERK_raw <- pERK_raw[seq(2, nrow(pERK_raw), 2), ]
@@ -167,7 +167,7 @@ mat1 <- pERK_ready[,-1]
 rownames(mat1) <- pERK_ready[,1]
 mat1[,c(13,14,15,1,2,3,4,5,6,7,8,9,10,11,12)] -> mat1 #rearrange so that SFEMII and SFEMII-EPO and SFEMII-TPO are in front
 mat1 <- log10(mat1) - log10(mat1[,1]) # log transform to get fold change
-mat1 <- mat1[-7,] # get rid of -MK
+pERK <- mat1[-7,] # get rid of -MK
 
 testF('pSTAT3') -> pSTAT3_raw
 pSTAT3_raw <- pSTAT3_raw[seq(2, nrow(pSTAT3_raw), 2), ]
@@ -188,7 +188,7 @@ mat2 <- pSTAT3_ready[,-1]
 rownames(mat2) <- pSTAT3_ready[,1]
 mat2[,c(13,14,15,1,2,3,4,5,6,7,8,9,10,11,12)] -> mat2 #rearrange so that SFEMII and SFEMII-EPO and SFEMII-TPO are in front
 mat2 <- log10(mat2) - log10(mat2[,1]) # log transform to get fold change
-mat2 <- mat2[-7,] # get rid of -MK
+pSTAT3 <- mat2[-7,] # get rid of -MK
 
 testF('pSTAT5') -> pSTAT5_raw
 pSTAT5_raw <- pSTAT5_raw[seq(2, nrow(pSTAT5_raw), 2), ]
@@ -209,7 +209,7 @@ mat3 <- pSTAT5_ready[,-1]
 rownames(mat3) <- pSTAT5_ready[,1]
 mat3[,c(13,14,15,1,2,3,4,5,6,7,8,9,10,11,12)] -> mat3 #rearrange so that SFEMII and SFEMII-EPO and SFEMII-TPO are in front
 mat3 <- log10(mat3) - log10(mat3[,1]) # log transform to get fold change
-mat3 <- mat3[-7,] # get rid of -MK
+pSTAT5 <- mat3[-7,] # get rid of -MK
 
 #colour settings. To change colour scheme please modify colour names in colorRampPalette() only
 breaks = c(seq(-1,-0.1,length=50),seq(-0.09,0.09,length=50),seq(0.1,1,length=50))
@@ -217,13 +217,20 @@ my_palette <- colorRampPalette(c("blue", "black", "yellow"))(n = length(breaks)-
 
 
 #png(file = "heatmap2.png")
-heatmap.2(as.matrix(mat),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
+heatmap.2(as.matrix(pAKT),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
           margins = c(15,15), col = my_palette, breaks = breaks, main='pAKT fold change vs SFEMII',na.color = 'magenta', srtCol=60)
-heatmap.2(as.matrix(mat1),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
+heatmap.2(as.matrix(pERK),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
           margins = c(15,15), col = my_palette, breaks = breaks, main='pERK fold change vs SFEMII',na.color = 'magenta', srtCol=60)
-heatmap.2(as.matrix(mat2),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
+heatmap.2(as.matrix(pSTAT3),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
           margins = c(15,15), col = my_palette, breaks = breaks, main='pSTAT3 fold change vs SFEMII',na.color = 'magenta', srtCol=60)
-heatmap.2(as.matrix(mat3),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
+heatmap.2(as.matrix(pSTAT5),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
           margins = c(15,15), col = my_palette, breaks = breaks, main='pSTAT5 fold change vs SFEMII',na.color = 'magenta', srtCol=60)
-
 #dev.off()
+
+# saving file to your getwd() with the name "PK_fold_all.csv", it is comma-delimited. So, use text-to-columns in excel to view it correctly
+out_file <- file("PK_fold_all.csv", open="a")
+for (i in seq_along(mat_out)){
+  write.table(names(mat_out)[i], file=out_file, sep=",", dec=".", col.names=FALSE, row.names=FALSE)
+  write.table(mat_out[[i]], file=out_file, sep=",", dec=".", quote=FALSE, col.names=NA, row.names=TRUE)  
+}
+close(out_file)
