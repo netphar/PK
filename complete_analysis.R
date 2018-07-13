@@ -19,7 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# Version: 0.1
+# Version: 0.2
 #
 # This file is part of project Visualization of Flow-cytometry Drug Screening Data.
 # Network Pharmacology for Precision Medicine Group
