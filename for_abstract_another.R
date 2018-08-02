@@ -1,4 +1,55 @@
+#########################################################################################
+# Copyright (C) 2018 {Bulat Zagidullin} {bulat.zagidullin@helsinki.fi}; {Jing Tang} {jing.tang@helsinki.fi}
+# MIT License
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#  
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+# Version: 0.1
+#
+# This file is part of project Visualization of Flow-cytometry Drug Screening Data.
+# Network Pharmacology for Precision Medicine Group
+# https://www.fimm.fi/en/research/groups/tang
+# Institute for Molecular Medicine Finland, University of Helsinki
+#
+# Short Description: this Software is used to generate and draw heatmaps of Phosphoflow Flow Cytometry experiments for the abstract of the ASH publication.
+# 
+# Manual:
+# Input is one FlowJo-generated excel (.xls) file.
+# Input files should contain an already applied gating strategy. 
+# Gating should be consistent for all WellIDs.
+# "Name" column should contain gating hierarchy in form of, e.g. "IntelliCyt_iQue3.fcs/Cells/Singlets/Q2: BL1-A+ , VL6-A+/CD110+/pAKT".
+# "Name" column should contain mean fluorescent intensity values in form of, e.g. "Mean : VL1-A = 92428.3515625".
+# "Statistic" column should contain numerical values of the mean fluorescent intensity or "n/a", if not available.
+# "IC$WellID" column should contain a valid WellID value in *EACH* row.
+# Normalization of mean fluorescent intensity values is done using Log10 method, such that fold change is log10(x) ??? log10(control) 
+# as per https://my.vanderbilt.edu/irishlab/protocols/scales-and-transformation/ visited on 12/07/2018.
+#
+# 1. Before using the script it is necessary to input correct setwd() and filename
+# 2. To modify the plate layout or Cell_Types identified in an experiment, please modify "Cell_type", "keys" and "values" variables 
+# 3. To modify any vizualization settings please refer to heatmap.2 function and its help page
+# 4. Plots and csv with fold change numerical values are saved in your getwd() directory
+#
+# ToDo's:
+# heatmap.2 does not allow for mfrow and mfcol parameters. Using gridgraphics instead
+# update heatmap.2() to pheatmap or maybe heatmap.3
+# colLabels shifted, becaus anchoring point is the lat character of the string vs first. 
+# margins is used to control the size of the cells. Use lhei / lwid and inner matrix coordinating of heatmap.2() to modify it
+######################################################################################### 
 library('readxl')
 library('dplyr')
 library('reshape2')
@@ -155,46 +206,6 @@ pSTAT5 <- mat3[-7,] # get rid of -MK
 #colour settings. To change colour scheme please modify colour names in colorRampPalette() only
 breaks = c(seq(-1,-0.1,length=30),seq(-0.09,0.09,length=30),seq(0.10,1,length=30))
 my_palette <- colorRampPalette(c("blue", "black", "yellow"))(n = length(breaks)-1)
-
-#library(gridGraphics)
-#grab_grob <- function(){
-#  grid.echo()
-#  grid.grab()
-#}
-
-
-#grid.newpage()
-
-# library(gridExtra)
-# grid.arrange(g,g, ncol=2, clip=TRUE)
-
-#lay <- grid.layout(nrow = 2, ncol=2)
-#pushViewport(viewport(layout = lay))
-
-#png(file = "heatmap2.png")
-#heatmap.2(as.matrix(pAKT),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
-#          margins = c(15,15), col = my_palette, breaks = breaks, main='pAKT fold change vs SFEMII',na.color = 'magenta', srtCol=60,cexRow=0.75, cexCol = 0.75)
-#g <- grab_grob()
-#grid.draw(editGrob(g, vp=viewport(layout.pos.row = 1, 
-#                                  layout.pos.col = 1, clip=TRUE)))
-#heatmap.2(as.matrix(pERK),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
-#          margins = c(15,15), col = my_palette, breaks = breaks, main='pERK fold change vs SFEMII',na.color = 'magenta', srtCol=60,cexRow=0.75, cexCol = 0.75)
-#g <- grab_grob()
-#grid.draw(editGrob(g, vp=viewport(layout.pos.row = 1, 
-#                                  layout.pos.col = 2, clip=TRUE)))
-#heatmap.2(as.matrix(pSTAT3),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
-#          margins = c(15,15), col = my_palette, breaks = breaks, main='pSTAT3 fold change vs SFEMII',na.color = 'magenta', srtCol=60,cexRow=0.75, cexCol = 0.75)
-#g <- grab_grob()
-#grid.draw(editGrob(g, vp=viewport(layout.pos.row = 2, 
-#                                  layout.pos.col = 1, clip=TRUE)))
-#heatmap.2(as.matrix(pSTAT5),density.info="none", trace="none",Colv="NA",Rowv = 'NA', dendrogram = 'none', 
-#          margins = c(15,15), col = my_palette, breaks = breaks, main='pSTAT5 fold change vs SFEMII',na.color = 'magenta', srtCol=60,cexRow=0.75, cexCol = 0.75)
-#g <- grab_grob()
-#grid.draw(editGrob(g, vp=viewport(layout.pos.row = 2, 
-#                                  layout.pos.col = 2, clip=TRUE)))
-#heatmap.2(as.matrix(mtcars))
-
-#upViewport(1)
 
 
 library(gridGraphics) 
