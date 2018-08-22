@@ -48,6 +48,7 @@
 # plot saving in user defined format (image vs pdf)
 # include sanity checks if gating is consistent or not
 # allow for batch processing of files
+# remove unneeded file after the end of teh script
 ######################################################################################### 
 library('readxl')
 library('dplyr')
