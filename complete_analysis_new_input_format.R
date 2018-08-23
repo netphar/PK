@@ -205,7 +205,7 @@ rm(list=ls(pattern='^temp'))
 # end testing
 
 #colour settings. To change colour scheme please modify colour names in colorRampPalette() only
-breaks = c(seq(-1,-0.1,length=50),seq(-0.09,0.09,length=50),seq(0.1,1,length=50))
+breaks = c(seq(-1,-0.08,length=50),seq(-0.07,0.07,length=50),seq(0.08,1,length=50))
 my_palette <- colorRampPalette(c("blue", "black", "yellow"))(n = length(breaks)-1)
 
 
